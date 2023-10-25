@@ -56,10 +56,6 @@ do
 	echo "Deleted $cmd"
 done
 
-cp -rf ../golang feeds/packages/lang/
-rm -rf package/kernel/linux/modules/netfilter.mk
-cp -rf ../modules/netfilter.mk package/kernel/linux/modules/netfilter.mk
-cp -rf ../custom/* package/custom/
 rm -rf target/linux/mediatek/patches-5.4/0504-macsec-revert-async-support.patch
 sed -i 's/LINUX_VERSION-5.4 =.*/LINUX_VERSION-5.4 = .258/g' include/kernel-5.4
 sed -i 's/LINUX_KERNEL_HASH.*/LINUX_KERNEL_HASH-5.4.258 = 39701815a7a1b5ea4253db18e9327a45926a944499628d032da63c1bb6ea623e/g' include/kernel-5.4

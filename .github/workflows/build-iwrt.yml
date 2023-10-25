@@ -78,12 +78,12 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE iwrt/.config
         cp ${GITHUB_WORKSPACE}/$DIY_P2_SH ${GITHUB_WORKSPACE}/iwrt/
         cd ${GITHUB_WORKSPACE}/iwrt
+        chmod +x $DIY_P2_SH
+        ./$DIY_P2_SH
         cp -rf ${GITHUB_WORKSPACE}/golang feeds/packages/lang/
         rm -rf package/kernel/linux/modules/netfilter.mk
         cp -rf ${GITHUB_WORKSPACE}/modules/netfilter.mk package/kernel/linux/modules/netfilter.mk
         cp -rf ${GITHUB_WORKSPACE}/custom/* package/custom/
-        chmod +x $DIY_P2_SH
-        ./$DIY_P2_SH
 
     - name: Install feeds
       run: |

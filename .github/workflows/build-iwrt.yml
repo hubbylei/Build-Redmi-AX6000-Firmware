@@ -153,28 +153,13 @@ jobs:
         echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M%S")"
         echo "::set-output name=status::success"
 
-    # - name: Upload File To Repo
-      # uses: cpina/github-action-push-to-another-repository@main
-      # if: steps.tag.outputs.status == 'success'
-      # env:
-        # API_TOKEN_GITHUB: ${{ secrets.ACTIONS_TRIGGER_PAT }}
-      # with:
-        # source-directory: '${{ env.FIRMWARE }}'
-        # destination-github-username: 'hubbylei'
-        # destination-repository-name: 'LEDE-R7800-Firmware-Files'
-        # user-email: 'hubbylei@hubbylei.dynu.net'
-        # commit-message: ${{ steps.tag.outputs.release_tag }}
-        # target-branch: main
-
     - name: Upload firmware to release
-      uses: softprops/action-gh-release@master
+      uses: ncipollo/release-action@v1
       if: steps.tag.outputs.status == 'success' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
+        tag: ${{ steps.tag.outputs.release_tag }}
         body: ${{ steps.tag.outputs.release_tag }}
-        files: ${{ env.FIRMWARE }}/*
+        artifacts: ${{ env.FIRMWARE }}/*
 
     - name: Delete workflow runs
       uses: Mattraks/delete-workflow-runs@main

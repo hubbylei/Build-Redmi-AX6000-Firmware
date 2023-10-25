@@ -4,11 +4,11 @@
 # This is free software, licensed under the MIT License.
 # See /LICENSE for more information.
 #
-# https://github.com/P3TERX/Actions-OpenWrt
-# Description: Build OpenWrt using GitHub Actions
+# https://github.com/P3TERX/Actions-iwrt
+# Description: Build iwrt using GitHub Actions
 #
 
-name: Build OpenWrt
+name: Build iwrt
 
 on:
   repository_dispatch:
@@ -22,7 +22,7 @@ on:
 
 env:
   REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x
-  REPO_BRANCH: openwrt-21.02
+  REPO_BRANCH: iwrt-21.02
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: ax6000.config
   DIY_P1_SH: diy-part1.sh
@@ -57,34 +57,33 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt ${GITHUB_WORKSPACE}/openwrt
+        git clone $REPO_URL -b $REPO_BRANCH iwrt
+        ln -sf /workdir/iwrt ${GITHUB_WORKSPACE}/iwrt
 
     - name: Load custom feeds
       run: |
-        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF ${GITHUB_WORKSPACE}/openwrt/feeds.conf.default
-        cp ${GITHUB_WORKSPACE}/$DIY_P1_SH ${GITHUB_WORKSPACE}/openwrt/
-        cd ${GITHUB_WORKSPACE}/openwrt
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF ${GITHUB_WORKSPACE}/iwrt/feeds.conf.default
+        cp ${GITHUB_WORKSPACE}/$DIY_P1_SH ${GITHUB_WORKSPACE}/iwrt/
+        cd ${GITHUB_WORKSPACE}/iwrt
         chmod +x $DIY_P1_SH
         ./$DIY_P1_SH
 
     - name: Update feeds
       run: |
-        cd ${GITHUB_WORKSPACE}/openwrt
+        cd ${GITHUB_WORKSPACE}/iwrt
         ./scripts/feeds update -a
 
     - name: Load custom configuration
       run: |
-        [ -e files ] && mv files ${GITHUB_WORKSPACE}/openwrt/files
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        cp ${GITHUB_WORKSPACE}/$DIY_P2_SH ${GITHUB_WORKSPACE}/openwrt/
-        cd ${GITHUB_WORKSPACE}/openwrt
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE iwrt/.config
+        cp ${GITHUB_WORKSPACE}/$DIY_P2_SH ${GITHUB_WORKSPACE}/iwrt/
+        cd ${GITHUB_WORKSPACE}/iwrt
         chmod +x $DIY_P2_SH
         ./$DIY_P2_SH
 
     - name: Install feeds
       run: |
-        cd ${GITHUB_WORKSPACE}/openwrt
+        cd ${GITHUB_WORKSPACE}/iwrt
         ./scripts/feeds update -i
         ./scripts/feeds install -a
 
@@ -98,7 +97,7 @@ jobs:
     - name: Download package
       id: package
       run: |
-        cd ${GITHUB_WORKSPACE}/openwrt
+        cd ${GITHUB_WORKSPACE}/iwrt
         make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
@@ -107,7 +106,7 @@ jobs:
     - name: Compile the firmware
       id: compile
       run: |
-        cd ${GITHUB_WORKSPACE}/openwrt
+        cd ${GITHUB_WORKSPACE}/iwrt
         echo -e "4 thread compile"
         make -j4 || make -j1 || make -j1 V=s
         echo "::set-output name=status::success"
@@ -122,16 +121,16 @@ jobs:
     - name: Zip bin directory
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
-        cd ${GITHUB_WORKSPACE}/openwrt/bin
-        zip -r ${GITHUB_WORKSPACE}/openwrt/OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip *
+        cd ${GITHUB_WORKSPACE}/iwrt/bin
+        zip -r ${GITHUB_WORKSPACE}/iwrt/iwrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip *
 
     - name: Organize files
       id: organize
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd ${GITHUB_WORKSPACE}/openwrt/bin/targets/*/*
+        cd ${GITHUB_WORKSPACE}/iwrt/bin/targets/*/*
         rm -rf packages
-        mv ${GITHUB_WORKSPACE}/openwrt/OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip ./
+        mv ${GITHUB_WORKSPACE}/iwrt/iwrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip ./
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
@@ -139,7 +138,7 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: iwrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
     - name: Generate release tag

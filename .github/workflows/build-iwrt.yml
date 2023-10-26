@@ -71,7 +71,7 @@ jobs:
 
     - name: Load custom configuration
       run: |
-        cp $CONFIG_FILE ${GITHUB_WORKSPACE}/iwrt/.config
+        ln -snf ${GITHUB_WORKSPACE}/$CONFIG_FILE ${GITHUB_WORKSPACE}/iwrt/.config
         cp ${GITHUB_WORKSPACE}/$DIY_P2_SH ${GITHUB_WORKSPACE}/iwrt/
         cd ${GITHUB_WORKSPACE}/iwrt
         chmod +x $DIY_P2_SH

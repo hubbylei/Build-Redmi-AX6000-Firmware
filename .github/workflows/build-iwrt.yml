@@ -98,6 +98,7 @@ jobs:
       id: package
       run: |
         cd ${GITHUB_WORKSPACE}/iwrt
+        make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;

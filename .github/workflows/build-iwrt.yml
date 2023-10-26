@@ -50,15 +50,11 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
 
     - name: Clone source code
-      working-directory: /workdir
       run: |
         df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH iwrt
-        ln -sf /workdir/iwrt ${GITHUB_WORKSPACE}/iwrt
+        git clone --depth 1 --single-branch $REPO_URL -b $REPO_BRANCH iwrt
 
     - name: Load custom feeds
       run: |

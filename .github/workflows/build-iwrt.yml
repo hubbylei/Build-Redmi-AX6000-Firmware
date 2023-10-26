@@ -62,7 +62,7 @@ jobs:
 
     - name: Load custom feeds
       run: |
-        cp $FEEDS_CONF ${GITHUB_WORKSPACE}/iwrt/feeds.conf.default
+        [ -e $FEEDS_CONF ] && cp $FEEDS_CONF ${GITHUB_WORKSPACE}/iwrt/feeds.conf.default
         cp ${GITHUB_WORKSPACE}/$DIY_P1_SH ${GITHUB_WORKSPACE}/iwrt/
         cd ${GITHUB_WORKSPACE}/iwrt
         chmod +x $DIY_P1_SH

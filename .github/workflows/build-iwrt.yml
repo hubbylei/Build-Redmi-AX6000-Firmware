@@ -40,6 +40,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4.1.1
 
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
     - name: Initialization environment
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -59,40 +66,19 @@ jobs:
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && cp $FEEDS_CONF ${GITHUB_WORKSPACE}/iwrt/feeds.conf.default
-        cp ${GITHUB_WORKSPACE}/$DIY_P1_SH ${GITHUB_WORKSPACE}/iwrt/
+        cp ${GITHUB_WORKSPACE}/$DIY_P1_SH ${GITHUB_WORKSPACE}/$DIY_P2_SH ${GITHUB_WORKSPACE}/iwrt/
         cd ${GITHUB_WORKSPACE}/iwrt
-        chmod +x $DIY_P1_SH
+        chmod a+x $DIY_P1_SH $DIY_P2_SH
         ./$DIY_P1_SH
-
-    - name: Update feeds
-      run: |
-        cd ${GITHUB_WORKSPACE}/iwrt
         ./scripts/feeds update -a
-
-    - name: Load custom configuration
-      run: |
-        ln -snf ${GITHUB_WORKSPACE}/$CONFIG_FILE ${GITHUB_WORKSPACE}/iwrt/.config
-        cp ${GITHUB_WORKSPACE}/$DIY_P2_SH ${GITHUB_WORKSPACE}/iwrt/
-        cd ${GITHUB_WORKSPACE}/iwrt
-        chmod +x $DIY_P2_SH
+        cp -f ${GITHUB_WORKSPACE}/$CONFIG_FILE ${GITHUB_WORKSPACE}/iwrt/.config
         ./$DIY_P2_SH
         cp -rf ${GITHUB_WORKSPACE}/golang feeds/packages/lang/
         rm -rf package/kernel/linux/modules/netfilter.mk
         cp -rf ${GITHUB_WORKSPACE}/modules/netfilter.mk package/kernel/linux/modules/netfilter.mk
         cp -rf ${GITHUB_WORKSPACE}/custom/* package/custom/
-
-    - name: Install feeds
-      run: |
-        cd ${GITHUB_WORKSPACE}/iwrt
         ./scripts/feeds update -i
         ./scripts/feeds install -a
-
-    - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@v1.0.0
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      env:
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
     - name: Download package
       id: package
@@ -107,7 +93,6 @@ jobs:
       id: compile
       run: |
         cd ${GITHUB_WORKSPACE}/iwrt
-        cat .config
         make -j$(nproc) || make -j1 V=s
         echo "status=success" >> "$GITHUB_OUTPUT"
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME

@@ -8,7 +8,7 @@
 # Description: Build iwrt using GitHub Actions
 #
 
-name: Build iwrt
+name: Build Firmware
 
 on:
   repository_dispatch:

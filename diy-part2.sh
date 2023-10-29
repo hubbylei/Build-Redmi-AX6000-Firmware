@@ -50,11 +50,11 @@ del_data="
 ./package/network/utils/iptables
 "
 
-for cmd in $del_data;
-do
-	rm -rf $cmd
-	echo "Deleted $cmd"
-done
+# for cmd in $del_data;
+# do
+# 	rm -rf $cmd
+# 	echo "Deleted $cmd"
+# done
 
 rm -rf target/linux/mediatek/patches-5.4/0504-macsec-revert-async-support.patch
 sed -i 's/LINUX_VERSION-5.4 =.*/LINUX_VERSION-5.4 = .258/g' include/kernel-5.4

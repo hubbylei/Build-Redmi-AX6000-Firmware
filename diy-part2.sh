@@ -1,17 +1,4 @@
 #!/bin/bash
-#
-# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# File name: diy-part2.sh
-# Description: OpenWrt DIY script part 2 (After Update feeds)
-#
-
-# Modify default IP
-#sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
 del_data="
 ./feeds/luci/applications/luci-app-passwall
@@ -57,8 +44,8 @@ del_data="
 # done
 
 rm -rf target/linux/mediatek/patches-5.4/0504-macsec-revert-async-support.patch
-sed -i 's/LINUX_VERSION-5.4 =.*/LINUX_VERSION-5.4 = .258/g' include/kernel-5.4
-sed -i 's/LINUX_KERNEL_HASH.*/LINUX_KERNEL_HASH-5.4.258 = 39701815a7a1b5ea4253db18e9327a45926a944499628d032da63c1bb6ea623e/g' include/kernel-5.4
+rm -rf include/kernel-5.4
+wget https://raw.githubusercontent.com/coolsnowwolf/lede/master/include/kernel-5.4 -O include/kernel-5.4
 
 sed -i '/sed -r -i/a\\tsed -i "s,#Port 22,Port 22,g" $(1)\/etc\/ssh\/sshd_config\n\tsed -i "s,#ListenAddress 0.0.0.0,ListenAddress 0.0.0.0,g" $(1)\/etc\/ssh\/sshd_config\n\tsed -i "s,#PermitRootLogin prohibit-password,PermitRootLogin yes,g" $(1)\/etc\/ssh\/sshd_config' feeds/packages/net/openssh/Makefile
 sed -i 's/;Listen = 0.0.0.0:1688/Listen = 0.0.0.0:1688/g' feeds/packages/net/vlmcsd/files/vlmcsd.ini

@@ -74,7 +74,7 @@ jobs:
         cp -f ${GITHUB_WORKSPACE}/$CONFIG_FILE ${GITHUB_WORKSPACE}/iwrt/.config
         ./$DIY_P2_SH
         rm -rf feeds/packages/lang/golang
-        cp -rf ${GITHUB_WORKSPACE}/golang feeds/packages/lang/
+        cp -rf tmp/packages/lang/golang feeds/packages/lang/
         rm -rf package/kernel/linux/modules/netfilter.mk
         cp -rf ${GITHUB_WORKSPACE}/modules/netfilter.mk package/kernel/linux/modules/netfilter.mk
         cp -rf ${GITHUB_WORKSPACE}/custom/* package/custom/

@@ -7,3 +7,4 @@ git clone https://github.com/xiaorouji/openwrt-passwall-packages -b main package
 git clone https://github.com/tty228/luci-app-wechatpush -b master package/custom/luci-app-wechatpush
 git clone https://github.com/hubbylei/openssl package/custom/openssl
 git clone https://github.com/hubbylei/wrtbwmon -b master package/custom/wrtbwmon
+git clone https://github.com/coolsnowwolf/packages -b master tmp/packages

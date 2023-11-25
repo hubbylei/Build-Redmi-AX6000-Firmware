@@ -69,9 +69,8 @@ jobs:
         cp ${GITHUB_WORKSPACE}/$DIY_P1_SH ${GITHUB_WORKSPACE}/$DIY_P2_SH ${GITHUB_WORKSPACE}/iwrt/
         cd ${GITHUB_WORKSPACE}/iwrt
         chmod a+x $DIY_P1_SH $DIY_P2_SH
-        ./$DIY_P1_SH
         ./scripts/feeds update -a
-        cp -f ${GITHUB_WORKSPACE}/$CONFIG_FILE ${GITHUB_WORKSPACE}/iwrt/.config
+        ./$DIY_P1_SH
         ./$DIY_P2_SH
         rm -rf feeds/packages/lang/golang
         cp -rf tmp/packages/lang/golang feeds/packages/lang/
@@ -85,10 +84,9 @@ jobs:
       id: package
       run: |
         cd ${GITHUB_WORKSPACE}/iwrt
+        cp -f ${GITHUB_WORKSPACE}/$CONFIG_FILE ${GITHUB_WORKSPACE}/iwrt/.config
         make defconfig
         make download -j8
-        find dl -size -1024c -exec ls -l {} \;
-        find dl -size -1024c -exec rm -f {} \;
 
     - name: Compile the firmware
       id: compile

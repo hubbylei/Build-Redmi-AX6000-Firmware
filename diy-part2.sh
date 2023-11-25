@@ -36,15 +36,22 @@ del_data="
 ./package/network/utils/iptables
 "
 
-# for cmd in $del_data;
-# do
-# 	rm -rf $cmd
-# 	echo "Deleted $cmd"
-# done
+for cmd in $del_data;
+do
+ 	rm -rf $cmd
+  echo "Deleted $cmd"
+done
 
 rm -rf target/linux/mediatek/patches-5.4/0504-macsec-revert-async-support.patch
-rm -rf include/kernel-5.4
-wget https://raw.githubusercontent.com/coolsnowwolf/lede/master/include/kernel-5.4 -O include/kernel-5.4
+Download_kernel(){
+rm -rf ~/$DEVICE/include/kernel-5.4
+wget -q https://raw.githubusercontent.com/coolsnowwolf/lede/master/include/kernel-5.4 -O include/kernel-5.4
+tmp=`ls -l include/kernel-5.4 | awk '{print $5}'`
+if [ $tmp == 0 ];then
+    Download_kernel
+fi
+}
+Download_kernel
 
 sed -i '/sed -r -i/a\\tsed -i "s,#Port 22,Port 22,g" $(1)\/etc\/ssh\/sshd_config\n\tsed -i "s,#ListenAddress 0.0.0.0,ListenAddress 0.0.0.0,g" $(1)\/etc\/ssh\/sshd_config\n\tsed -i "s,#PermitRootLogin prohibit-password,PermitRootLogin yes,g" $(1)\/etc\/ssh\/sshd_config' feeds/packages/net/openssh/Makefile
 sed -i 's/;Listen = 0.0.0.0:1688/Listen = 0.0.0.0:1688/g' feeds/packages/net/vlmcsd/files/vlmcsd.ini
@@ -72,4 +79,8 @@ sed -i '/PKG_MIRROR_HASH:=/d' package/custom/smartdns/Makefile
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:='"$SMARTDNS_VER"'/g' package/custom/smartdns/Makefile
 sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:='"$SMAERTDNS_SHA"'/g' package/custom/smartdns/Makefile
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:='"$SMARTDNS_VER"'/g' package/custom/luci-app-smartdns/Makefile
+
+Build_Date=R`date "+%y.%m.%d"`
+sed -i '/exit 0/i\sed -i "s\/DISTRIB_REVISION=.*\/DISTRIB_REVISION='"'${Build_Date}'"'\/g" \/etc\/openwrt_release' package/emortal/default-settings/files/99-default-settings
+sed -i '/exit 0/i\sed -i "s\/DISTRIB_DESCRIPTION=.*\/DISTRIB_DESCRIPTION='"'ImmortalWrt ${Build_Date} '"'\/g" \/etc\/openwrt_release\n' package/emortal/default-settings/files/99-default-settings
 

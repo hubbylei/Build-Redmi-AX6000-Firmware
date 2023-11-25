@@ -38,8 +38,8 @@ del_data="
 
 for cmd in $del_data;
 do
- 	rm -rf $cmd
-  echo "Deleted $cmd"
+ rm -rf $cmd
+ echo "Deleted $cmd"
 done
 
 rm -rf target/linux/mediatek/patches-5.4/0504-macsec-revert-async-support.patch

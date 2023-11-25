@@ -33,7 +33,6 @@ del_data="
 ./feeds/packages/net/xray-core
 ./feeds/packages/lang/golang
 ./package/libs/openssl
-./package/network/config/firewall
 ./package/network/utils/iptables
 "
 

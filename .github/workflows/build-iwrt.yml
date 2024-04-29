@@ -72,11 +72,6 @@ jobs:
         ./scripts/feeds update -a
         ./$DIY_P1_SH
         ./$DIY_P2_SH
-        rm -rf feeds/packages/lang/golang
-        cp -rf tmp/packages/lang/golang feeds/packages/lang/
-        rm -rf package/kernel/linux/modules/netfilter.mk
-        cp -rf ${GITHUB_WORKSPACE}/modules/netfilter.mk package/kernel/linux/modules/netfilter.mk
-        cp -rf ${GITHUB_WORKSPACE}/custom/* package/custom/
         ./scripts/feeds update -i
         ./scripts/feeds install -a
 

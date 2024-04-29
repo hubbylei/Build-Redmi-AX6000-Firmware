@@ -9,5 +9,6 @@ git clone https://github.com/hubbylei/openssl package/custom/openssl
 git clone https://github.com/hubbylei/wrtbwmon -b master package/custom/wrtbwmon
 git clone https://github.com/hubbylei/openwrt-cdnspeedtest -b master package/custom/openwrt-cdnspeedtest
 git clone https://github.com/hubbylei/luci-app-cloudflarespeedtest -b main package/custom/luci-app-cloudflarespeedtest
+git clone https://github.com/hubbylei/iptables -b main package/custom/iptables
 git clone https://github.com/openwrt/packages -b master tmp/packages
 git clone https://github.com/coolsnowwolf/lede -b master tmp/lede

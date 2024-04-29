@@ -61,7 +61,7 @@ jobs:
     - name: Clone source code
       run: |
         df -hT $PWD
-        git clone --depth 1 --single-branch $REPO_URL -b $REPO_BRANCH iwrt
+        git clone $REPO_URL -b $REPO_BRANCH ${GITHUB_WORKSPACE}/iwrt
 
     - name: Load custom feeds
       run: |

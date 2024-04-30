@@ -17,8 +17,8 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-  schedule:
-    - cron: 0 14 * * *
+#  schedule:
+#    - cron: 0 14 * * *
 
 env:
   REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x

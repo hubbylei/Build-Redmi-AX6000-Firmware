@@ -128,12 +128,23 @@ jobs:
         echo "release_tag=$(date +"%Y.%m.%d-%H%M%S")" >> "$GITHUB_OUTPUT"
         echo "status=success" >> "$GITHUB_OUTPUT"
 
+    - name: Generate release info
+      id: info
+      if: steps.tag.outputs.status == 'success' && !cancelled()
+      run: |
+        echo "## :mega:Update content" > release.txt
+        echo "![](https://img.shields.io/github/downloads/${{ github.repository }}/${{ steps.tag.outputs.release_tag }}/total?style=flat-square)" >> release.txt
+        echo "### Info" >> release.txt
+        echo "**:minidisc: Build Time: ${{ steps.tag.outputs.release_tag }}**" >> release.txt
+        touch release.txt
+        echo "status=success" >> $GITHUB_OUTPUT
+
     - name: Upload firmware to release
       uses: ncipollo/release-action@main
-      if: steps.tag.outputs.status == 'success' && !cancelled()
+      if: steps.info.outputs.status == 'success' && !cancelled()
       with:
         tag: ${{ steps.tag.outputs.release_tag }}
-        body: ${{ steps.tag.outputs.release_tag }}
+        bodyFile: release.txt
         artifacts: ${{ env.FIRMWARE }}/*
 
     - name: Delete workflow runs

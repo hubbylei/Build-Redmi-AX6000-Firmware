@@ -38,10 +38,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4.1.1
+      uses: actions/checkout@main
 
     - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@v1.0.0
+      uses: P3TERX/ssh2actions@main
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -114,7 +114,7 @@ jobs:
         echo "status=success" >> "$GITHUB_OUTPUT"
 
     - name: Upload firmware directory
-      uses: actions/upload-artifact@v4.3.3
+      uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         name: iwrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
@@ -129,7 +129,7 @@ jobs:
         echo "status=success" >> "$GITHUB_OUTPUT"
 
     - name: Upload firmware to release
-      uses: ncipollo/release-action@v1.14.0
+      uses: ncipollo/release-action@main
       if: steps.tag.outputs.status == 'success' && !cancelled()
       with:
         tag: ${{ steps.tag.outputs.release_tag }}
@@ -137,13 +137,13 @@ jobs:
         artifacts: ${{ env.FIRMWARE }}/*
 
     - name: Delete workflow runs
-      uses: Mattraks/delete-workflow-runs@v2.0.6
+      uses: Mattraks/delete-workflow-runs@main
       with:
         retain_days: 0
         keep_minimum_runs: 1
 
     - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.3.3
+      uses: dev-drprasad/delete-older-releases@master
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         keep_latest: 30

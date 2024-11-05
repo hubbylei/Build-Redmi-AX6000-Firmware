@@ -33,9 +33,6 @@ feeds/packages/net/xray-core
 feeds/packages/net/cdnspeedtest
 feeds/packages/lang/golang
 feeds/packages/devel/gn
-package/libs/openssl
-package/network/utils/iptables
-package/network/services/dnsmasq
 target/linux/mediatek/patches-5.4/0504-macsec-revert-async-support.patch
 target/linux/mediatek/patches-5.4/0005-dts-mt7622-add-gsw.patch
 target/linux/mediatek/patches-5.4/0993-arm64-dts-mediatek-Split-PCIe-node-for-MT2712-MT7622.patch
@@ -50,11 +47,8 @@ done
 
 cp -rf tmp/packages/lang/golang feeds/packages/lang/
 cp -rf tmp/packages/lang/rust feeds/packages/lang/
-cp -rf tmp/lede/package/network/services/dnsmasq package/network/services/
 rm package/kernel/linux/modules/netfilter.mk
 cp ${GITHUB_WORKSPACE}/modules/netfilter.mk package/kernel/linux/modules/netfilter.mk
-rm include/kernel-5.4
-cp tmp/lede/include/kernel-5.4 include/kernel-5.4
 
 # ssh
 sed -i '/sed -r -i/a\\tsed -i "s,#Port 22,Port 22,g" $(1)\/etc\/ssh\/sshd_config\n\tsed -i "s,#ListenAddress 0.0.0.0,ListenAddress 0.0.0.0,g" $(1)\/etc\/ssh\/sshd_config\n\tsed -i "s,#PermitRootLogin prohibit-password,PermitRootLogin yes,g" $(1)\/etc\/ssh\/sshd_config' feeds/packages/net/openssh/Makefile
@@ -98,12 +92,14 @@ sed -i '/PKG_MIRROR_HASH:=/d' package/custom/smartdns/Makefile
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:='"$SMARTDNS_VER"'/g' package/custom/smartdns/Makefile
 sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:='"$SMAERTDNS_SHA"'/g' package/custom/smartdns/Makefile
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:='"$SMARTDNS_VER"'/g' package/custom/luci-app-smartdns/Makefile
-sed -i 's/href = "smartdns"/href = "\/cgi-bin\/luci\/admin\/services\/smartdns"/g' package/custom/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/log.js
 sed -i 's/..\/..\/luci.mk/$(TOPDIR)\/feeds\/luci\/luci.mk/g' package/custom/luci-app-smartdns/Makefile
 
 # default-settings
 Build_Date=R`date "+%y.%m.%d"`
 sed -i '/exit 0/i\sed -i "s\/DISTRIB_REVISION=.*\/DISTRIB_REVISION='"'${Build_Date}'"'\/g" \/etc\/openwrt_release' package/emortal/default-settings/files/99-default-settings
-sed -i '/exit 0/i\sed -i "s\/DISTRIB_DESCRIPTION=.*\/DISTRIB_DESCRIPTION='"'ImmortalWrt ${Build_Date} '"'\/g" \/etc\/openwrt_release\n' package/emortal/default-settings/files/99-default-settings
+sed -i '/exit 0/i\sed -i "s\/DISTRIB_DESCRIPTION=.*\/DISTRIB_DESCRIPTION='"'IWRT ${Build_Date} '"'\/g" \/etc\/openwrt_release\n' package/emortal/default-settings/files/99-default-settings
 sed -i '/exit 0/i\echo "vm.min_free_kbytes=65536" > \/etc\/sysctl.d\/11-nf-conntrack-max.conf' package/emortal/default-settings/files/99-default-settings
 sed -i '/exit 0/i\echo "net.netfilter.nf_conntrack_max=65535" >> \/etc\/sysctl.d\/11-nf-conntrack-max.conf' package/emortal/default-settings/files/99-default-settings
+
+# Lan IP
+sed -i 's/192.168.1.1/192.168.10.1/g' package/base-files/files/bin/config_generate

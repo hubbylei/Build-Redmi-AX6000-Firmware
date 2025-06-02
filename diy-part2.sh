@@ -101,6 +101,7 @@ sed -i 's/PKG_SOURCE_PROTO:=git/PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz/g'
 sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/pymumu\/smartdns\/tar.gz\/$(PKG_VERSION)?/g' package/custom/smartdns/Makefile
 sed -i '/PKG_SOURCE_VERSION:=.*/d' package/custom/smartdns/Makefile
 sed -i 's/PKG_MIRROR_HASH:=.*/PKG_HASH:='${SMARTDNS_PKG_SHA}'/g' package/custom/smartdns/Makefile
+sed -i 's/..\/..\/lang/$(TOPDIR)\/feeds\/packages\/lang/g' package/custom/smartdns/Makefile
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:='${SMARTDNS_VER}'/g' package/custom/luci-app-smartdns/Makefile
 sed -i 's/..\/..\/luci.mk/$(TOPDIR)\/feeds\/luci\/luci.mk/g' package/custom/luci-app-smartdns/Makefile
 

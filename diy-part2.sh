@@ -19,6 +19,7 @@ done
 
 cp -rf tmp/packages/lang/rust feeds/packages/lang/
 cp -rf tmp/luci/modules/luci-lua-runtime feeds/luci/modules/
+cp -rf tmp/luci/contrib/package/ucode-mod-lua feeds/luci/contrib/package/
 
 # golang
 git clone --depth 1 --single-branch https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang

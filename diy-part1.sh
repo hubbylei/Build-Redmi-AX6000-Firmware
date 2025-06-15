@@ -10,3 +10,4 @@ git clone https://github.com/hubbylei/openwrt-cdnspeedtest -b master package/cus
 git clone https://github.com/hubbylei/luci-app-cloudflarespeedtest -b main package/custom/luci-app-cloudflarespeedtest
 git clone https://github.com/openwrt/packages -b master tmp/packages
 git clone https://github.com/immortalwrt/luci -b master tmp/luci
+git clone https://github.com/immortalwrt/immortalwrt -b master tmp/imm

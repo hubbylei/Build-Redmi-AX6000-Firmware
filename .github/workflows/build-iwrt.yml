@@ -73,13 +73,13 @@ jobs:
         ./$DIY_P2_SH
         ./scripts/feeds update -i
         ./scripts/feeds install -a
+        cp -f ${GITHUB_WORKSPACE}/$CONFIG_FILE ${GITHUB_WORKSPACE}/iwrt/.config
+        make defconfig
 
     - name: Download package
       id: package
       run: |
         cd ${GITHUB_WORKSPACE}/iwrt
-        cp -f ${GITHUB_WORKSPACE}/$CONFIG_FILE ${GITHUB_WORKSPACE}/iwrt/.config
-        make defconfig
         make download -j8
 
     - name: Compile the firmware

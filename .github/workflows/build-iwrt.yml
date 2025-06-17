@@ -80,7 +80,7 @@ jobs:
       id: package
       run: |
         cd ${GITHUB_WORKSPACE}/iwrt
-        make download -j8
+        make download -j$(nproc)
 
     - name: Compile the firmware
       id: compile

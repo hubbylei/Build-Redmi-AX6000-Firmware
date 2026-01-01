@@ -47,6 +47,9 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
+    - name: Clean-up
+      uses: rokibhasansagar/slimhub_actions@main
+
     - name: Initialization environment
       env:
         DEBIAN_FRONTEND: noninteractive
